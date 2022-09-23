@@ -1,0 +1,35 @@
+-- Database: prova_jr
+
+-- DROP DATABASE IF EXISTS prova_jr;
+
+CREATE DATABASE prova_jr
+    WITH
+    OWNER = postgres
+    ENCODING = 'UTF8'
+    LC_COLLATE = 'Portuguese_Brazil.1252'
+    LC_CTYPE = 'Portuguese_Brazil.1252'
+    TABLESPACE = pg_default
+    CONNECTION LIMIT = -1
+    IS_TEMPLATE = False;
+
+
+-- Table: public.prv_pessoa
+
+-- DROP TABLE IF EXISTS public.prv_pessoa;
+
+CREATE TABLE IF NOT EXISTS public.prv_pessoa
+(
+    pes_id integer NOT NULL DEFAULT nextval('prv_pessoa_pes_id_seq'::regclass),
+    pes_nome character varying(80) COLLATE pg_catalog."default" NOT NULL,
+    pes_sexo character varying(1) COLLATE pg_catalog."default" NOT NULL,
+    pes_email character varying(50) COLLATE pg_catalog."default" NOT NULL,
+    pes_celular character varying(15) COLLATE pg_catalog."default" NOT NULL,
+    pes_senha character varying(14) COLLATE pg_catalog."default" NOT NULL,
+    pes_data_cadastro timestamp without time zone NOT NULL,
+    CONSTRAINT prv_pessoa_pkey PRIMARY KEY (pes_id)
+)
+
+TABLESPACE pg_default;
+
+ALTER TABLE IF EXISTS public.prv_pessoa
+    OWNER to postgres;
