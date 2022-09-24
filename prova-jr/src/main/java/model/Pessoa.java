@@ -1,5 +1,6 @@
 package model;
 
+import java.sql.Date;
 
 public class Pessoa {
 	private int id;
@@ -8,7 +9,7 @@ public class Pessoa {
 	private String email;
 	private String celular;
 	private String senha;
-	private String data_cadastro;
+	private Date data_cadastro;
 	
 	
 	public int getId() {
@@ -47,10 +48,10 @@ public class Pessoa {
 	public void setSenha(String senha) {
 		this.senha = senha;
 	}
-	public String getData_cadastro() {
+	public Date getData_cadastro() {
 		return data_cadastro;
 	}
-	public void setData_cadastro(String data_cadastro) {
+	public void setData_cadastro(Date data_cadastro) {
 		this.data_cadastro = data_cadastro;
 	}
 	

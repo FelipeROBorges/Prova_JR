@@ -1,7 +1,6 @@
 package controllers;
 
 import java.io.IOException;
-import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -22,6 +21,11 @@ public class UsuarioLogin extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		String pesquisa = request.getParameter("pesquisa");
+		String email = request.getParameter("email");
+		String senha = request.getParameter("senha");
+		boolean validador = false;
+		
+		
 
 		if (pesquisa == null) {
 			pesquisa = "";
@@ -29,9 +33,19 @@ public class UsuarioLogin extends HttpServlet {
 
 		List<Pessoa> pessoas = PessoaDAO.find(pesquisa);
 
-		request.setAttribute("pessoas", pessoas);
-		RequestDispatcher resquesDispatcher = request.getRequestDispatcher("lista.jsp");
-		resquesDispatcher.forward(request, response);
-
+		for(int i = 0; i < pessoas.size(); i ++ ) {
+			String pessoa_email = pessoas.get(i).getEmail();
+			String pessoa_senha = pessoas.get(i).getSenha();
+			if(pessoa_email.equals(email) && pessoa_senha.equals(senha)) {
+				System.out.println("Validado com sucesso!");
+				validador = true;
+			}  
+		}
+		if(validador == true) {
+			response.sendRedirect("./sucesso.html");
+		} else {
+			System.out.println("Usuario invalido!");
+			response.sendRedirect("./index.html"); 
+		}
 	}
 }

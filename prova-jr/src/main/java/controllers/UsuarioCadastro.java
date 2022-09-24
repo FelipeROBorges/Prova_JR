@@ -1,8 +1,9 @@
 package controllers;
 
 import java.io.IOException;
-import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
+
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -22,19 +23,33 @@ public class UsuarioCadastro extends HttpServlet {
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		Pessoa pessoa = new Pessoa();
+		List<Pessoa> pessoas = PessoaDAO.find("");
+		String email = request.getParameter("email");
+		boolean validador = true;
+		for(int i = 0; i < pessoas.size(); i ++ ) {
+			String pessoa_email = pessoas.get(i).getEmail();
+			if(pessoa_email.equals(email)) {
+				System.out.println("Email já existe!");
+				validador = false;
+			}  
+		}
 
 		pessoa.setNome(request.getParameter("nome"));
 		pessoa.setSexo(request.getParameter("sexo"));
 		pessoa.setEmail(request.getParameter("email"));
 		pessoa.setCelular(request.getParameter("celular"));
 		pessoa.setSenha(request.getParameter("senha"));
-		SimpleDateFormat formatter = new SimpleDateFormat("yyyy/MM/dd");
-		Date date = new Date();
-		System.out.println("Valor da data:" + date);
-		System.out.println("Valor da data formatado:" + formatter.format(date));
-		pessoa.setData_cadastro(formatter.format(date));
-		PessoaDAO.create(pessoa);
+		java.util.Date date = new Date();
+		java.sql.Date sqlDate = new java.sql.Date(date.getTime());
+		pessoa.setData_cadastro(sqlDate);
 
-		doGet(request, response);
+
+		if(validador == true) {
+			PessoaDAO.create(pessoa);
+			response.sendRedirect("./sucesso.html");
+		} else {
+			System.out.println("Email invalido!");
+			response.sendRedirect("./index.html"); 
+		}
 	}
 }

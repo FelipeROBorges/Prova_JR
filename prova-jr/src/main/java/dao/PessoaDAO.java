@@ -7,7 +7,6 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Date;
 import db.PgConnection;
 import model.Pessoa;
 
@@ -17,22 +16,26 @@ public class PessoaDAO implements CRUD {
 	private static String sql;
 	
 	public static void create(Pessoa pessoa) {
-		 sql = "INSERT INTO prv_pessoa VALUES (null, ?, ?, ?, ?, ?, ?)";
+		 sql = "INSERT INTO prv_pessoa VALUES (? , ?, ?, ?, ?, ?, ?)";
 		 
 		 try {
 			 PreparedStatement preparedStatement = connection.prepareStatement(sql);
 			 
-			 preparedStatement.setString(1, pessoa.getNome());
-			 preparedStatement.setString(2, pessoa.getSexo());
-			 preparedStatement.setString(3, pessoa.getEmail());
-			 preparedStatement.setString(4, pessoa.getCelular());
-			 preparedStatement.setString(5, pessoa.getSenha());
-			 preparedStatement.setString(6, pessoa.getData_cadastro());
+			 int max = 1000;
+			 int min = 3;
+			 int random_int = (int)Math.floor(Math.random()*(max-min+1)+min);
+			 preparedStatement.setInt(1, random_int);
+			 preparedStatement.setString(2, pessoa.getNome());
+			 preparedStatement.setString(3, pessoa.getSexo());
+			 preparedStatement.setString(4, pessoa.getEmail());
+			 preparedStatement.setString(5, pessoa.getCelular());
+			 preparedStatement.setString(6, pessoa.getSenha());
+			 preparedStatement.setDate(7, pessoa.getData_cadastro());
 			 
 			 preparedStatement.executeUpdate();
 			 
 			 System.out.println("--correct insert on database");
-			 
+			  
 		 } catch(SQLException e) {
 			 System.out.println("--incorrect insert on database. " + e.getMessage());
 		 }
@@ -74,7 +77,7 @@ public class PessoaDAO implements CRUD {
 				pessoa.setEmail(resultSet.getString("pes_email"));
 				pessoa.setCelular(resultSet.getString("pes_celular"));
 				pessoa.setSenha(resultSet.getString("pes_senha"));
-				pessoa.setData_cadastro(resultSet.getString("pes_data_cadastro"));
+				pessoa.setData_cadastro(resultSet.getDate("pes_data_cadastro"));
 				
 				pessoas.add(pessoa);
 				
@@ -106,7 +109,7 @@ public class PessoaDAO implements CRUD {
 				pessoa.setEmail(resultSet.getString("pes_email"));
 				pessoa.setCelular(resultSet.getString("pes_celular"));
 				pessoa.setSenha(resultSet.getString("pes_senha"));
-				pessoa.setData_cadastro(resultSet.getString("pes_data_cadastro"));
+				pessoa.setData_cadastro(resultSet.getDate("pes_data_cadastro"));
 			}
 			
 			System.out.println("--correct find by pk pessoa");
